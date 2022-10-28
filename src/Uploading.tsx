@@ -1,96 +1,62 @@
-import React, { useRef, useState } from "react";
-import {
-  Box,
-} from "@material-ui/core";
- 
-import LinearProgress from '@material-ui/core/LinearProgress';
-
- 
+import React from "react";
+import { Box } from "@material-ui/core";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
-import type {sectionData} from "./Home"
- 
-interface IProps {  
-  sectionFile:sectionData; 
-  // startUpload: boolean;
+import type { sectionData } from "./Home";
+
+interface IProps {
+  sectionFile: sectionData;
 }
 
-const Uploading = ({sectionFile}: IProps) => {
+const Uploading = ({ sectionFile }: IProps) => {
   const [progress, setProgress] = React.useState(-1);
   const [files, setFiles] = React.useState<string[]>(sectionFile.fileNames);
   const [id] = React.useState<Number>(sectionFile.id);
-  const [formData, setFormData] = React.useState<FormData>(sectionFile.formData);
+  //this field is the content we used to sent to the server side, but in this demo, I was not required to do so.
+  const [formData, setFormData] = React.useState<FormData>(
+    sectionFile.formData
+  );
 
-  
-  
-
-  console.log('55555555');
   const classes = useStyles();
 
- 
-
-
-  React.useEffect(() => { 
-
-  
-
-    // const progress = (progressEvent.loaded / progressEvent.total) * 50;
-    // setProgress(progress);
-
+  React.useEffect(() => {
     //https://dev.to/jbrocher/react-tips-tricks-uploading-a-file-with-a-progress-bar-3m5p
-    //以下指示模拟以下UI上的进度。正常应该是在uploading的过程中，异步更新progress的数字，然后setProgress，这样可以渲染更新后的进度栏
-    const timer = setInterval(() => { 
-      // setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 8));
+    //Just simulate the progress on the UI part. Normally, in the process of uploading, update the progress number asynchronously, and then setProgress, so that the updated progress bar can be rendered.
+    const timer = setInterval(() => {
       setProgress((prevProgress) => {
-        if(prevProgress >= 100){
+        if (prevProgress >= 100) {
           sectionFile.uploaded = true;
           return 100;
-        }
-        else{
+        } else {
           return prevProgress + 8;
         }
       });
     }, 800);
 
- 
-
     return () => {
-      clearInterval(timer); 
-    }; 
+      clearInterval(timer);
+    };
   }, []);
- 
 
-
-  
-    return( 
-      <>
-      {
-    (progress < 100)&& 
-    (
-      <Box className={classes.dragContainer}>
-       
-          <Box sx={{ width: '100%' }}>
-          <LinearProgress variant="determinate" value={progress} />
-          </Box>  
-      <Box>
-        { 
-        files.map((_file,i) => {
-          return <span> {_file} |  </span>
-        })
-        
-        } 
-      </Box> 
-      </Box>
-    ) 
-
-  }
+  return (
+    <>
+      {progress < 100 && (
+        <Box className={classes.dragContainer}>
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress variant="determinate" value={progress} />
+          </Box>
+          <Box>
+            {files.map((_file, i) => {
+              return <span> {_file} | </span>;
+            })}
+          </Box>
+        </Box>
+      )}
     </>
-    )
-  
+  );
 };
 
-
 const useStyles = makeStyles({
-
   dragContainer: {
     height: 40,
     background: "#6f60aa",
@@ -99,7 +65,5 @@ const useStyles = makeStyles({
     marginTop: 10,
   },
 });
- 
-export default Uploading;
 
- 
+export default Uploading;

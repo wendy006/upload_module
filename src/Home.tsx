@@ -1,19 +1,11 @@
-import React, { useRef, useState } from "react";
-import {
-  Button,
-  Box,
-  Typography,
-  Divider,
-  TextField,
-} from "@material-ui/core";
-import { red } from "@material-ui/core/colors";
+import { useState } from "react";
+import { Button, Box, Typography, Divider, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import  Uploading  from "./Uploading";
+import Uploading from "./Uploading";
 import bg from "./assets/bg.png";
-import { Autocomplete } from "@material-ui/lab";
 
 type sectionData = {
-  id:number;
+  id: number;
   fileNames: string[];
   formData: FormData;
   uploaded: boolean;
@@ -21,83 +13,47 @@ type sectionData = {
 
 export type { sectionData };
 
-
-interface IProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const Home = ({ open, onClose }: IProps) => {
-  console.log("111111111111111");
+const Home = () => {
   const [source, setSource] = useState<sectionData[]>([]);
   const [tobeUpload, setTobeUpload] = useState<sectionData>();
- 
- 
-
-  const classes = useStyles(); 
- 
-
+  const classes = useStyles();
   // https://stackoverflow.com/questions/46119987/upload-and-read-a-file-in-react
   const handleNewFileSelect = (values: any) => {
-    console.log(values);
-    console.log(values.target);
-    console.log(values.currentTarget);
-    console.log(values.target.files);
-    console.log(values.target.files[0]);
-    console.log(values.target.files[0].name);
-
-
-
-
     let names = [];
     let data = new FormData();
 
-    for(let i = 0; i < values.target.files.length; i++){
+    for (let i = 0; i < values.target.files.length; i++) {
       let file = values.target.files[i];
       names.push(file.name);
-      data.append('file', file); 
+      data.append("file", file);
     }
 
-    console.log(names); 
-    let newSectionData:sectionData = {id:getTimestampInSeconds(), fileNames:names, formData:data, uploaded:false}; 
+    let newSectionData: sectionData = {
+      id: getTimestampInSeconds(),
+      fileNames: names,
+      formData: data,
+      uploaded: false,
+    };
     setTobeUpload(newSectionData);
-     
-    // setSource(source.concat(newSectionData));
-    console.log(tobeUpload); 
   };
 
-  const handleNewSectionUpload = (button:any) => {
-     
-    setSource(source.concat(tobeUpload!)); 
-    console.log(source); 
+  const handleNewSectionUpload = (button: any) => {
+    setSource(source.concat(tobeUpload!));
     setTobeUpload(undefined);
-    
-  }
+  };
 
-  
-  // const updateSectionStatus = (tobeRemoved: sectionData) => {
-  //   let newSource = source.filter(sectionFile => sectionFile.id != tobeRemoved.id); 
-  //   console.log('EEEEEEEEEEEEEEEEEEEEEEEEEE');
-  //   console.log(source); 
-  //   console.log(newSource); 
-  //   setSource(newSource);   
-  // }
+  const getTimestampInSeconds = () => {
+    return Math.floor(Date.now() / 1000);
+  };
 
-  const getTimestampInSeconds =() => {
-    return Math.floor(Date.now() / 1000)
-  }
-
-  console.log("33333");
-  const color1 = red[500];
   return (
-    
     <>
       <Typography component="h2" variant="h2" className={classes.title}>
         Demo
       </Typography>
       <Divider></Divider>
 
-      <Box className={classes.dragContainer}> 
+      <Box className={classes.dragContainer}>
         <TextField
           id="outlined-basic"
           label="Outlined"
@@ -105,78 +61,58 @@ const Home = ({ open, onClose }: IProps) => {
           fullWidth
           className={classes.drag}
           type="file"
-          onChange={event => {
+          onChange={(event) => {
             handleNewFileSelect(event);
-          }}          
+          }}
           title=""
           value=""
           hidden
           inputProps={{
-            style: { 
+            style: {
               height: 230,
             },
-            multiple: true,//上传多个文件
+            multiple: true,
           }}
-          
         />
- 
-        {/* <Typography component="h2" variant="h2" className={classes.title}>
-          Drag / Click / Drop File
-        </Typography>  */}
 
-        
-
-
-
-        
-
-        {  
-       (tobeUpload && tobeUpload.fileNames)&& (
-        <Box className={classes.boxCenter}>
-       <Typography component="h6" variant="h6" className={classes.title}> File To be Upload:  
-       <br/> 
-       {
-        tobeUpload.fileNames.map((name, i) => {
-        return ( <li>{name}</li> )  
-       })
-
-        }
-
-        </Typography> 
-         </Box>
-
-       ) 
-       }
-
-
-         
+        {tobeUpload && tobeUpload.fileNames && (
+          <Box className={classes.boxCenter}>
+            <Typography component="h6" variant="h6" className={classes.title}>
+              {" "}
+              File To be Upload:
+              <br />
+              {tobeUpload.fileNames.map((name, i) => {
+                return <li>{name}</li>;
+              })}
+            </Typography>
+          </Box>
+        )}
       </Box>
 
-      
-      <Button  disabled = {!(tobeUpload && tobeUpload.fileNames)}  onClick={handleNewSectionUpload} className={classes.uploadBtn}> Upload </Button>
-       
-
-
-        {console.log('wwwwwwwwwwwwwwwwwwwww')}
-        
-       { 
-       
-       (source.length > 0)&&(
+      <Button
+        disabled={!(tobeUpload && tobeUpload.fileNames)}
+        onClick={handleNewSectionUpload}
+        className={classes.uploadBtn}
+      >
+        {" "}
+        Upload{" "}
+      </Button>
+      {source.length > 0 && (
         <Box className={classes.boxPadding}>
-       {
-       source.map((_sectionFile, i) => {
-        return (_sectionFile.uploaded===false)&&(<Uploading sectionFile={_sectionFile}/>)
-      })
-        }
+          {source.map((_sectionFile, i) => {
+            return (
+              _sectionFile.uploaded === false && (
+                <Uploading sectionFile={_sectionFile} />
+              )
+            );
+          })}
         </Box>
-       ) 
-       }
+      )}
     </>
-      
-     
   );
 };
 
+//https://stackoverflow.com/questions/55781090/styles-withstyles-defaulttheme-option-cant-set-custom-theme
 //https://stackoverflow.com/questions/52759220/importing-images-in-typescript-react-cannot-find-module
 const useStyles = makeStyles({
   uploadBtn: {
@@ -187,24 +123,19 @@ const useStyles = makeStyles({
     height: 50,
     width: 60,
     padding: "1px 1px",
-
-    // display: "block",
-    // margin: "0 auto",
-    // position: "absolute",
-    marginTop: 5, 
-    float:"right",
+    marginTop: 5,
+    float: "right",
     marginRight: "25%",
 
-    "&.Mui-active":{
+    "&.Mui-active": {
       background: "#00BFFF",
-      color: "white", 
+      color: "white",
     },
 
-    "&.Mui-disabled":{
+    "&.Mui-disabled": {
       background: "#778899",
-      color: "#F0FFFF", 
+      color: "#F0FFFF",
     },
-    
   },
 
   dragContainer: {
@@ -212,11 +143,11 @@ const useStyles = makeStyles({
     height: 250,
     background: "gray",
     padding: "10px 10px",
-    margin: "0 auto", 
+    margin: "0 auto",
     backgroundImage: `url(${bg})`,
     backgroundPosition: "center",
     backgroundSize: "auto 100%",
-    backgroundRepeat: "no-repeat",  //背景图片只显示一次
+    backgroundRepeat: "no-repeat",
   },
 
   drag: {
@@ -231,31 +162,28 @@ const useStyles = makeStyles({
     opacity: 0,
     width: "100%",
     height: "100%",
-
     "&.Mui-focused": {
       outline: "none",
     },
   },
 
-  boxPadding:{
+  boxPadding: {
     marginTop: 60,
   },
 
-  boxCenter:{
-     
-    height:"100%",
+  boxCenter: {
+    height: "100%",
     width: "15%",
     float: "right",
-    display:"flex" ,
-    alignItems:"center",
-    justifyContent:"center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     background: "white",
   },
 
-  title: { 
+  title: {
     textAlign: "center",
   },
 });
- 
+
 export default Home;
- 
