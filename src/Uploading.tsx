@@ -2,13 +2,10 @@ import React, { useRef, useState } from "react";
 import {
   Box,
 } from "@material-ui/core";
-// https://codesandbox.io/s/wf9qpj?file=/demo.tsx
-import { LinearProgressProps } from '@material-ui/core';
+ 
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { Alert } from "@material-ui/lab";
-import { sizing } from "@material-ui/system";
-import { red } from "@material-ui/core/colors";
+ 
 import { makeStyles } from "@material-ui/core/styles";
 import type {sectionData} from "./Home"
  
