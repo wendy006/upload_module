@@ -8,7 +8,9 @@ import {
 } from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
-import  Uploading  from "./Uploading"
+import  Uploading  from "./Uploading";
+import bg from "./assets/bg.png";
+import { Autocomplete } from "@material-ui/lab";
 
 type sectionData = {
   id:number;
@@ -91,7 +93,7 @@ const Home = ({ open, onClose }: IProps) => {
     
     <>
       <Typography component="h2" variant="h2" className={classes.title}>
-        Upload File
+        Demo
       </Typography>
       <Divider></Divider>
 
@@ -111,32 +113,37 @@ const Home = ({ open, onClose }: IProps) => {
           hidden
           inputProps={{
             style: { 
-              height: 280,
+              height: 230,
             },
             multiple: true,//上传多个文件
           }}
           
         />
  
-        <Typography component="h2" variant="h2" className={classes.title}>
+        {/* <Typography component="h2" variant="h2" className={classes.title}>
           Drag / Click / Drop File
-        </Typography> 
+        </Typography>  */}
+
+        
+
 
 
         
 
         {  
        (tobeUpload && tobeUpload.fileNames)&& (
-        <Box>
-       <Typography component="h6" variant="h6" className={classes.title}>File To be Uploaded: </Typography> 
+        <Box className={classes.boxCenter}>
+       <Typography component="h6" variant="h6" className={classes.title}> File To be Upload:  
+       <br/> 
        {
         tobeUpload.fileNames.map((name, i) => {
-        return (<li>{name}</li>)  
+        return ( <li>{name}</li> )  
        })
 
         }
-        <Button onClick={handleNewSectionUpload}> Upload </Button>
-        </Box>
+
+        </Typography> 
+         </Box>
 
        ) 
        }
@@ -144,16 +151,24 @@ const Home = ({ open, onClose }: IProps) => {
 
          
       </Box>
+
+      
+      <Button  disabled = {!(tobeUpload && tobeUpload.fileNames)}  onClick={handleNewSectionUpload} className={classes.uploadBtn}> Upload </Button>
+       
+
+
         {console.log('wwwwwwwwwwwwwwwwwwwww')}
         
        { 
        
        (source.length > 0)&&(
-
+        <Box className={classes.boxPadding}>
+       {
        source.map((_sectionFile, i) => {
         return (_sectionFile.uploaded===false)&&(<Uploading sectionFile={_sectionFile}/>)
       })
-
+        }
+        </Box>
        ) 
        }
     </>
@@ -162,27 +177,46 @@ const Home = ({ open, onClose }: IProps) => {
   );
 };
 
+//https://stackoverflow.com/questions/52759220/importing-images-in-typescript-react-cannot-find-module
 const useStyles = makeStyles({
   uploadBtn: {
-    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    background: "#00BFFF",
     border: 0,
     borderRadius: 3,
     color: "white",
-    height: 100,
-    width: "20%",
-    padding: "30px 30px",
+    height: 50,
+    width: 60,
+    padding: "1px 1px",
 
-    display: "block",
-    margin: "0 auto",
-    marginTop: "22px",
+    // display: "block",
+    // margin: "0 auto",
+    // position: "absolute",
+    marginTop: 5, 
+    float:"right",
+    marginRight: "25%",
+
+    "&.Mui-active":{
+      background: "#00BFFF",
+      color: "white", 
+    },
+
+    "&.Mui-disabled":{
+      background: "#778899",
+      color: "#F0FFFF", 
+    },
+    
   },
 
   dragContainer: {
     position: "relative",
-    height: 300,
+    height: 250,
     background: "gray",
     padding: "10px 10px",
-    margin: "0 auto",
+    margin: "0 auto", 
+    backgroundImage: `url(${bg})`,
+    backgroundPosition: "center",
+    backgroundSize: "auto 100%",
+    backgroundRepeat: "no-repeat",  //背景图片只显示一次
   },
 
   drag: {
@@ -203,8 +237,22 @@ const useStyles = makeStyles({
     },
   },
 
-  title: {
-    flexGrow: 1,
+  boxPadding:{
+    marginTop: 60,
+  },
+
+  boxCenter:{
+     
+    height:"100%",
+    width: "15%",
+    float: "right",
+    display:"flex" ,
+    alignItems:"center",
+    justifyContent:"center",
+    background: "white",
+  },
+
+  title: { 
     textAlign: "center",
   },
 });
