@@ -79,7 +79,7 @@ const Home = () => {
           <Box className={classes.boxCenter}>
             <Typography component="h6" variant="h6" className={classes.title}>
               {" "}
-              File To be Upload:
+              File(s) to Upload:
               <br />
               {tobeUpload.fileNames.map((name, i) => {
                 return <li>{name}</li>;
