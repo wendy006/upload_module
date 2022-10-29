@@ -1,4 +1,5 @@
-# upload_module
+# Upload Module
+
 ## Description
 
 ##### 1. It is an upload module by React (take home assignment)
